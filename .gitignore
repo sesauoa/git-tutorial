@@ -9,7 +9,7 @@
 *.fls
 *.out
 *.toc
-*.ctp
+*.cpt
 
 ## Intermediate documents:
 *.dvi
