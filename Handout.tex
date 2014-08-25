@@ -1,0 +1,179 @@
+\documentclass{tufte-handout}
+\usepackage{listings}
+\usepackage{cprotect}
+\usepackage{multicol}
+\usepackage{graphicx}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=bash,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  upquote=true
+}
+
+\title{Git Working!}
+\author{SESA}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent In this tutorial, we'll be covering the basics of git so that you'll
+be able to use it when working on assignments throughout your degree. We'll be
+assuming you're on a lab computer running Ubuntu, but if you've gotten git 
+working on a personal device that you are more comfortable with, use that. It's
+recommended that you type out all commands provided rather than copying and
+pasting them. This is to help you become more familiar with a terminal and
+get super fast at typing stuff out.
+\end{abstract}
+
+\noindent To being with, you're going to want to open up a terminal window and your
+favourite text editor.
+
+\section{Gitting Started}
+\subsection{Initial Setup}
+
+Before we do anything, let's get git setup.
+
+\begin{lstlisting}
+$ git config --global user.username "Your Name"
+$ git config --global user.email "your_email@example.com"
+\end{lstlisting}
+
+\subsection{First Steps}
+
+First, you're going to want to move into your workspace. Then, create a new 
+directory for the repo. Finally, initialise the git repository.
+
+\begin{lstlisting}
+$ cd ~/workspace
+$ mkdir git-tutorial
+$ cd git-tutorial
+$ git init
+$ git status
+\end{lstlisting}
+
+\noindent Note down what's changed in the directory, what does git status show?
+
+\subsection{Making History}
+We'll need to make something into the repo for it to be useful at all. Make
+anything you want really, but here's something\cprotect\footnote{
+	\begin{lstlisting}[language=Python]
+	#! /usr/bin/env python
+
+	print 'Hello, world!'
+	\end{lstlisting}
+}. Add the file(s) you created to the repo and save it's state with a commit. 
+It's a good idea to check the state of the repo along the way.
+
+\begin{lstlisting}
+$ touch hello_world.py
+$ vim hello_world.py # Use you're favourite editor here.
+$ python hello_world.py
+Hello, world!
+$ git status
+$ git add .
+$ git status
+$ git commit -m 'hello world'
+$ git status
+\end{lstlisting}
+
+What's printed out by git status? What is an untracked file? Do you know what
+the . means when adding files? What does the -m option of git commit do?
+
+\section{Branching Out}
+\noindent It's time to add an `experimental' feature to our code. We don't
+want to break master if we make a mistake so we'll be working on a different 
+branch.
+
+\subsection{Creating a Branch}
+
+\noindent Let's create a branch for experimenting on. We'll call it develop as this is 
+the industry standard.
+
+\begin{lstlisting}
+$ git branch develop
+$ git branch
+$ git checkout develop
+$ git status
+\end{lstlisting}
+
+\noindent Notice what the current branch is from the output of git branch. Can
+you tell what branch you're on using git status?
+
+\subsection{More Changes}
+
+\noindent Time to add that `experimental' feature. Go ahead and change the code to
+produce something different \cprotect\footnote{
+	\begin{lstlisting}[language=Python]
+	#! /usr/bin/env python
+
+	print 'Hello, world'
+	print 'Hello, Nasser!'
+	\end{lstlisting}
+}.
+
+\begin{lstlisting}
+$ vim hello_world.py
+$ python hello_world.py
+Hello, world!
+Hello, Nasser!
+$ git status
+$ git diff
+$ git commit -am 'experimenting'
+$ git status
+\end{lstlisting}
+
+\noindent What was shown by git diff, and do you understand what it means?
+
+\subsection{Checking the Log}
+
+\noindent Time to review what we've done to the repo. This is achieved by having a look
+at the log that git keeps automatically.
+
+\begin{lstlisting}
+$ git log
+\end{lstlisting}
+
+\subsection{Merging changes}
+\noindent Everything seems to be working fine so we haven't broken anything. 
+Let's merge the changes we made back into the master branch.
+
+\begin{lstlisting}
+$ git checkout master
+$ git log
+$ python hello_world.py
+Hello, world!
+$ git merge develop
+$ python hello_world.py
+Hello, world!
+Hello, Nasser!
+$ git log
+\end{lstlisting}
+
+\noindent Notice how after you checkout the master branch, changes you made in
+the develop branch aren't there until you merge. What does Fast-forward mean in
+the output of git merge?
+
+\section{Github}
+
+Time to get your code on the line! We're going to set up a remote repository
+and push your changes up to it. Pick a friend or random stranger (or use my
+Chris' repo \url{https://github.com/drpotato/git-tutorial})
+
+\end{document}
