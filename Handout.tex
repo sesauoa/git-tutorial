@@ -3,6 +3,7 @@
 \usepackage{cprotect}
 \usepackage{multicol}
 \usepackage{graphicx}
+\DeclareGraphicsExtensions{.png,.jpg}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -36,9 +37,10 @@
 \noindent In this tutorial, we'll be covering the basics of git so that you'll
 be able to use it when working on assignments throughout your degree. We'll be
 assuming you're on a lab computer running Ubuntu, but if you've gotten git 
-working on a personal device that you are more comfortable with, use that. It's
-recommended that you type out all commands provided rather than copying and
-pasting them. This is to help you become more familiar with a terminal and
+working on a personal device that you are more comfortable with, use that.
+
+\noindent It's recommended that you type out all commands provided rather than copying
+and pasting them. This is to help you become more familiar with a terminal and
 get super fast at typing stuff out.
 \end{abstract}
 
@@ -64,8 +66,8 @@ directory for the repo. Finally, initialise the git repository.
 $ cd ~/workspace
 $ mkdir git-tutorial
 $ cd git-tutorial
-$ git init
-$ git status
+$ git init # Initalise the directory as a git repo
+$ git status # Check the status of the repo
 \end{lstlisting}
 
 \noindent Note down what's changed in the directory, what does git status show?
@@ -82,19 +84,19 @@ anything you want really, but here's something\cprotect\footnote{
 It's a good idea to check the state of the repo along the way.
 
 \begin{lstlisting}
-$ touch hello_world.py
-$ vim hello_world.py # Use you're favourite editor here.
+$ touch hello_world.py # Create a file called hello_world.py
+$ vim hello_world.py # Use your favourite editor here.
 $ python hello_world.py
 Hello, world!
 $ git status
-$ git add .
+$ git add . # Add all files to the repo for tracking
 $ git status
-$ git commit -m 'hello world'
+$ git commit -m 'hello world' # Save the state of the repo.
 $ git status
 \end{lstlisting}
 
-What's printed out by git status? What is an untracked file? Do you know what
-the . means when adding files? What does the -m option of git commit do?
+\noindent What's printed out by git status? What is an untracked file? Do you know what
+the . is when adding files? What does the -m option of git commit do?
 
 \section{Branching Out}
 \noindent It's time to add an `experimental' feature to our code. We don't
@@ -107,9 +109,9 @@ branch.
 the industry standard.
 
 \begin{lstlisting}
-$ git branch develop
-$ git branch
-$ git checkout develop
+$ git branch develop # Create the new branch
+$ git branch # List the branches in the repo
+$ git checkout develop # Checkout the newly created branch
 $ git status
 \end{lstlisting}
 
@@ -134,12 +136,12 @@ $ python hello_world.py
 Hello, world!
 Hello, Nasser!
 $ git status
-$ git diff
+$ git diff # See what's changed from the last commit
 $ git commit -am 'experimenting'
 $ git status
 \end{lstlisting}
 
-\noindent What was shown by git diff, and do you understand what it means?
+\noindent What was shown by git diff? Do you understand what it means?
 
 \subsection{Checking the Log}
 
@@ -155,11 +157,11 @@ $ git log
 Let's merge the changes we made back into the master branch.
 
 \begin{lstlisting}
-$ git checkout master
-$ git log
+$ git checkout master # Move back to the master branch.
+$ git log # Display a log of commits in the repo.
 $ python hello_world.py
 Hello, world!
-$ git merge develop
+$ git merge develop # Merge changes from develop into master.
 $ python hello_world.py
 Hello, world!
 Hello, Nasser!
@@ -172,8 +174,96 @@ the output of git merge?
 
 \section{Github}
 
-Time to get your code on the line! We're going to set up a remote repository
-and push your changes up to it. Pick a friend or random stranger (or use my
-Chris' repo \url{https://github.com/drpotato/git-tutorial})
+\noindent Time to get your code on the line! We're going to set up a remote
+repository and push your changes up to it.
+
+\noindent Head on over to \url{https://github.com} and create an account if you
+don't have one already. This should be straight forward, but if you have any
+issues ask a tutor.
+
+\noindent For image guides on how to navigate Github, please see the appendix.
+
+\subsection{Creating a Remote Repo}
+
+\noindent First, we need to create a remote repo on github to store a copy of
+our repo in. You'll need to come up with a cool name for the repo or just use
+git-tutorial, either will do.
+
+\noindent Github will provide instructions on how to get your code up there,
+but we'll still cover it here.
+
+\noindent I'll be using \url{https://github.com/drpotato/git-tutorial} as the
+remote repo in the example.
+
+\begin{lstlisting}
+$ # Add a link a remote repository to the local one.
+$ git remote add origin git@github.com:drpotato/git-tutorial.git
+$ git push --set-upstream --all # Push changes to the remote repo.
+\end{lstlisting}
+
+\noindent What do the --set-upstream and --all flags for git push do?
+
+\subsection{Forking}
+\noindent Pick a friend or random stranger (or use Chris' repo 
+\url{https://github.com/drpotato/git-tutorial}) and fork their repository.
+
+\noindent Once forked, go up a directory and clone your new repo and make some
+changes \cprotect\footnote{
+	\begin{lstlisting}[language=Python]
+	#! /usr/bin/env python
+
+	print 'Hello, world'
+	print 'Hello, Github!'
+	\end{lstlisting}
+}. Be sure to checkout develop, just in case you break the build When you're
+done, push the changes up to github.
+
+\begin{lstlisting}
+$ cd ..
+$ # Download a copy of the remote repository
+$ git clone git@github.com:drpotato/git-tutorial.git
+$ cd git-tutorial
+$ git checkout develop # By default it will be on master.
+$ vim hello_world.py
+$ python hello_world.py
+Hello, world!
+Hello, Github!
+$ git status
+$ git diff
+$ git commit -am 'changed the hello message'
+$ git push origin develop
+\end{lstlisting}
+
+\noindent What does git push origin develop do exactly? How is it different
+from git push --all?
+
+\subsection{Pull Request}
+
+\noindent Now we're going to submit a pull request. This is asking the original
+repo's owner to go over changes we've made and merge them in if they're
+acceptable.
+
+\noindent Navigate to your forked github repo on \url{https://github.com}.
+Click the `Compare, review and create a pull request' button. This will take
+you to a page to set up a pull request before you fire it off to the owner of
+the original repo.
+
+\noindent Get your partner to accept your pull request and discuss the changes
+you made with each other.
+
+\pagebreak
+\appendix
+\section{Appendix}
+
+Create a repo on Github.
+
+\includegraphics[scale=0.4]{img/github-create-repo.png}
+
+\pagebreak
+Start a pull request.
+
+\includegraphics[scale=0.4]{img/github-start-pull-request.png}
+
+\includegraphics[scale=0.4]{img/github-finish-pull-request.png}
 
 \end{document}
